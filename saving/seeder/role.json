@@ -1,0 +1,13 @@
+[
+	{
+		"target_class": "Role",
+		"data": [
+			{
+				"name": "user"
+			},
+			{
+				"name": "admin"
+			}
+		]
+	}
+]
