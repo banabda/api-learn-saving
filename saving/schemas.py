@@ -92,9 +92,8 @@ class ShowUser(BaseModel):
 
 
 class Balance(BaseModel):
-    id: Optional[int] = None
-    amount: Optional[int] = None
-    description: Optional[str] = None
+    amount: int
+    description: str
 
     class Config():
         orm_mode = True

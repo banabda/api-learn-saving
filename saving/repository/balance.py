@@ -5,54 +5,52 @@ from datetime import datetime
 
 
 def getall(db: Session):
-    transactions = db.query(models.Transaction).all()
-    return transactions
+    balance = db.query(models.Balance).all()
+    return balance
 
 
 def create(request, user, db: Session):
-    new_Transaction = models.Transaction(
+    new_balance = models.Balance(
         user_id=user.id,
-        balance_id=0,
         amount=request.amount,
-        type=request.type,
         description=request.description)
-    db.add(new_Transaction)
+    db.add(new_balance)
     db.commit()
-    db.refresh(new_Transaction)
-    return new_Transaction
+    db.refresh(new_balance)
+    return new_balance
 
 
 def show(id, db: Session):
-    transaction = db.query(models.Transaction).filter(
-        models.Transaction.id == id).first()
-    if transaction:
-        transaction.code = 200
-        return transaction
+    balance = db.query(models.Balance).filter(
+        models.Balance.id == id).first()
+    if balance:
+        balance.code = 200
+        return balance
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                        detail=f"Transaction with the id {id} not exist!")
+                        detail=f"balance with the id {id} not exist!")
     # response.status_code = status.HTTP_404_NOT_FOUND
-    # return {"id": id, "message": f"Transaction with the id {id} not exist!", "code": 404}
+    # return {"id": id, "message": f"balance with the id {id} not exist!", "code": 404}
 
 
 def update(id, request, db: Session):
-    transaction = db.query(models.Transaction).filter(
-        models.Transaction.id == id)
-    if transaction.first():
-        transaction.update(
+    balance = db.query(models.Balance).filter(
+        models.Balance.id == id)
+    if balance.first():
+        balance.update(
             {"balance_id": request.balance_id, "amount": request.amount, "type": request.type, "description": request.description, "updated_at": datetime.now()})
         db.commit()
-        return {"id": id, "message": f"Transaction with the id {id} Updated!", "code": 204}
+        return {"id": id, "message": f"balance with the id {id} Updated!", "code": 204}
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                        detail=f"Transaction with the id {id} not exist!")
+                        detail=f"balance with the id {id} not exist!")
 
 
 def delete(id, db: Session):
-    transaction = db.query(models.Transaction).filter(
-        models.Transaction.id == id)
-    if transaction.first():
-        transaction.delete(synchronize_session=False)
+    balance = db.query(models.balance).filter(
+        models.balance.id == id)
+    if balance.first():
+        balance.delete(synchronize_session=False)
         db.commit()
-        # db.refresh(transaction)
-        return {"id": id, "message": f"Transaction with the id {id} Deleted!", "code": 204}
+        # db.refresh(balance)
+        return {"id": id, "message": f"balance with the id {id} Deleted!", "code": 204}
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                        detail=f"Transaction with the id {id} doesn't exist!")
+                        detail=f"balance with the id {id} doesn't exist!")
