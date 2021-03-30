@@ -22,22 +22,12 @@ class User(Base):
     password = Column(String)
     phone = Column(String)
     token = Column(String)
-    verified = Column(Boolean)
-    role = Column(Integer, ForeignKey(Role.id))
+    verified = Column(Boolean, default=False)
+    role = Column(Integer, ForeignKey(Role.id), default=1)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=None)
-    savings = relationship('Transaction', back_populates='creator')
+    transactions = relationship('Transaction', back_populates='creator')
     the_role = relationship('Role', back_populates='the_user')
-    has_role = relationship('UserHasRole', back_populates='the_user_has_role')
-
-
-class UserHasRole(Base):
-    __tablename__ = 'user_has_roles'
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey(User.id))
-    created_at = Column(DateTime, default=datetime.now())
-    updated_at = Column(DateTime, default=None)
-    the_user_has_role = relationship('User', back_populates='has_role')
 
 
 class Balance(Base):
@@ -61,5 +51,5 @@ class Transaction(Base):
     description = Column(String)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=None)
-    creator = relationship('User', back_populates='savings')
+    creator = relationship('User', back_populates='transactions')
     balan = relationship('Balance', back_populates='transac')

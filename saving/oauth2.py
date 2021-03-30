@@ -6,7 +6,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from .token import verify_token
-from . import schemas
+from . import schemas, models
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
@@ -17,15 +17,15 @@ def get_current_user(data: str = Depends(oauth2_scheme)):
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-
-    return verify_token(data, credentials_exception)
-    # user = get_user(fake_users_db, email=token_data.email)
+    # user = db.query(models.User).filter(models.User.email == request.email)
     # if user is None:
     #     raise credentials_exception
+    return verify_token(data, credentials_exception)
+    # return dict("user": user, "token": verify_token(data, credentials_exception))
     # return user
 
 
-# async def get_current_active_user(current_user: schemas.User = Depends(get_current_user)):
-#     if current_user.disabled:
-#         raise HTTPException(status_code=400, detail="Inactive user")
-#     return current_user
+def get_current_active_user(current_user: schemas.User = Depends(get_current_user)):
+    return current_user
+    # if current_user.disabled:
+    #     raise HTTPException(status_code=400, detail="Inactive user")

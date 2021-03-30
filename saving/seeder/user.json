@@ -1,0 +1,21 @@
+[
+	{
+		"target_class": "User",
+		"data": [
+			{
+				"name": "admin",
+				"email": "admin@admin.com",
+				"password": "$2y$12$/Ztfxh8ReCd82vOznAz1VO.6BY3FLu7MCefpVU6xvlp4KPYR/lysC",
+				"phone": "089653468001",
+				"role": 1
+			},
+			{
+				"name": "user",
+				"email": "user@user.com",
+				"password": "$2y$12$9sp/sc/jjVIhpNp94/8eW.gNFx32nR06hyeeS1T3Twn9.jL8GhO1q",
+				"phone": "085155226016",
+				"role": 2
+			}
+		]
+	}
+]
