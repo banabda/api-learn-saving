@@ -2,35 +2,35 @@ from typing import List
 from fastapi import APIRouter, Depends, status, Response
 from .. import schemas, database, oauth2
 from sqlalchemy.orm import Session
-from ..repository import transaction
+from ..repository import balance
 
 router = APIRouter(
-    tags=['Transaction'],
-    prefix='/transaction'
+    tags=['Balance'],
+    prefix='/balance'
 )
 get_db = database.get_db
 
 
 @router.get('/', response_model=List[schemas.ShowTransaction])
 def all(db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
-    return transaction.getall(db)
+    return balance.getall(db)
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
 def create(request: schemas.Transaction, current_user: schemas.User = Depends(oauth2.get_current_user), db: Session = Depends(get_db)):
-    return transaction.create(request, current_user, db)
+    return balance.create(request, current_user, db)
 
 
 @router.get('/{id}', response_model=schemas.ShowTransaction)
 def show(id, response: Response, current_user: schemas.User = Depends(oauth2.get_current_user), db: Session = Depends(get_db)):
-    return transaction.show(id, db)
+    return balance.show(id, db)
 
 
 @router.put('/{id}', status_code=status.HTTP_202_ACCEPTED)
 def update(id, request: schemas.Transaction, current_user: schemas.User = Depends(oauth2.get_current_user), db: Session = Depends(get_db)):
-    return transaction.update(id, request, db)
+    return balance.update(id, request, db)
 
 
 @router.delete('/{id}')
 def destroy(id, current_user: schemas.User = Depends(oauth2.get_current_user), db: Session = Depends(get_db)):
-    return transaction.delete(id, db)
+    return balance.delete(id, db)

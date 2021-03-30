@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status, Response, HTTPException
-from .. import schemas, models, hashing, database, token
+from .. import schemas, models, hashing, database, token, oauth2
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 from ..repository import auth
@@ -17,7 +17,7 @@ def register(request: schemas.User, db: Session = Depends(get_db)):
 
 
 @router.post('/resetpassword')
-def reset(request: schemas.UserPassword, db: Session = Depends(get_db)):
+def reset(request: schemas.UserPassword, current_user: schemas.User = Depends(oauth2.get_current_user), db: Session = Depends(get_db)):
     return auth.reset(request, db)
 
 

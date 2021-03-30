@@ -4,7 +4,6 @@ from typing import List, Optional
 
 
 class Transaction(BaseModel):
-    user_id: int
     balance_id: int
     amount: int
     type: str
@@ -38,6 +37,18 @@ class RoleName(BaseModel):
         orm_mode = True
 
 
+class UserTransaction(BaseModel):
+    id: int
+    amount: int
+    type: str
+    description: str
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+
+    class Config():
+        orm_mode = True
+
+
 class UserDetail(BaseModel):
     id: int
     name: str
@@ -47,6 +58,7 @@ class UserDetail(BaseModel):
     token: Optional[str] = None
     verified: bool
     the_role: RoleName
+    transactions: List[UserTransaction] = []
 
     class Config():
         orm_mode = True
@@ -79,10 +91,21 @@ class ShowUser(BaseModel):
         orm_mode = True
 
 
+class Balance(BaseModel):
+    id: Optional[int] = None
+    amount: Optional[int] = None
+    description: Optional[str] = None
+
+    class Config():
+        orm_mode = True
+
+
 class ShowTransaction(BaseModel):
-    title: str
-    body: str
+    amount: int
+    type: str
+    description: str
     creator: UserProfile
+    # balan: Balance
 
     class Config():
         orm_mode = True

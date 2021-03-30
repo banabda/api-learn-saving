@@ -1,6 +1,6 @@
 from . import models
 from .database import engine, get_db, SessionLocal
-from .routers import auth, transaction, user
+from .routers import auth, transaction, user, balance
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -13,6 +13,7 @@ models.Base.metadata.create_all(engine)
 app.include_router(auth.router)
 app.include_router(transaction.router)
 app.include_router(user.router)
+app.include_router(balance.router)
 
 origins = [
     "http://localhost",

@@ -7,22 +7,24 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 from .token import verify_token
 from . import schemas, models
+from sqlalchemy.orm import Session
+from .database import get_db
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
-def get_current_user(data: str = Depends(oauth2_scheme)):
+def get_current_user(data: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    # user = db.query(models.User).filter(models.User.email == request.email)
-    # if user is None:
-    #     raise credentials_exception
-    return verify_token(data, credentials_exception)
+    user = db.query(models.User).filter(models.User.token == data).first()
+    if user is None:
+        raise credentials_exception
+    # return verify_token(data, credentials_exception)
     # return dict("user": user, "token": verify_token(data, credentials_exception))
-    # return user
+    return user
 
 
 def get_current_active_user(current_user: schemas.User = Depends(get_current_user)):
