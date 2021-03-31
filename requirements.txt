@@ -14,3 +14,4 @@ sqlalchemy-seeder
 bcrypt
 cryptography==3.3
 fastapi
+deta
